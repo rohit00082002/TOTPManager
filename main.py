@@ -17,7 +17,10 @@ class TOTPManager(tk.Tk):
                 self.table.delete(1.0, tk.END)
                 # Populate the table with the JSON data
                 for keyww, valueww in ddt.items():
-                    vlww = pyotp.TOTP(valueww).now()
+                    try:
+                        vlww = pyotp.TOTP(valueww).now()
+                    except Exception as e:
+                        vlww = "Invalid Value!!!"
                     self.table.insert(tk.END, f"{keyww}:   {vlww}\n")
         except Exception:
             pass
@@ -94,6 +97,8 @@ class TOTPManager(tk.Tk):
             json.dump(self.data, f, indent=2)
 
         self.table_reload()
+        self.key_entry.delete(0, tk.END)
+        self.value_entry.delete(0, tk.END)
 try:
     with open("data.json", "r") as f:
         data = json.load(f)
